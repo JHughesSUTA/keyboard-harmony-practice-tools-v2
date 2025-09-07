@@ -8,7 +8,7 @@ const Header = () => {
           name="tempo"
           className="tempo-container__slider"
           type="range"
-          autocomplete="off"
+          autoComplete="off"
           min="20"
           max="80"
           value="30"

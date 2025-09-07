@@ -1,10 +1,4 @@
-export type KeyOption = {
-  id: number;
-  label: string;
-  active: boolean;
-};
-
-export type ChordOption = {
+export type Option = {
   id: number;
   label: string;
   active: boolean;
