@@ -1,17 +1,16 @@
 import OptionButton from "../OptionButton/OptionButton";
-import useOptions from "../../hooks/useOptions";
-import { initialChordOptions } from "../../data/chordOptionData";
+import type { Option } from "../../types";
 
-const ChordOptions = () => {
-  const { options: chordOptions, toggleActive } = useOptions(
-    initialChordOptions,
-    "chord"
-  );
+type ChordOptionsProps = {
+  options: Option[];
+  toggleActive: (id: number) => void;
+};
 
+const ChordOptions = ({ options, toggleActive }: ChordOptionsProps) => {
   return (
     <section>
       <div className="grid gap-2 md:gap-4 grid-cols-6 py-4 text-xs md:text-lg">
-        {chordOptions.map((chord) => (
+        {options.map((chord: Option) => (
           <OptionButton
             key={chord.id}
             option={chord}

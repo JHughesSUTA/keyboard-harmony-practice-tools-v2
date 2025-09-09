@@ -15,6 +15,8 @@ export default function useOptions(
     }
   });
 
+  const activeOptions = options.filter((option) => option.active);
+
   useEffect(() => {
     sessionStorage.setItem(`${optionType}-options`, JSON.stringify(options));
   }, [options]);
@@ -27,5 +29,5 @@ export default function useOptions(
     );
   };
 
-  return { options, toggleActive };
+  return { options, toggleActive, activeOptions };
 }

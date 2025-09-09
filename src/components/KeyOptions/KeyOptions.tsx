@@ -1,17 +1,16 @@
 import OptionButton from "../OptionButton/OptionButton";
-import { initialKeyOptions } from "../../data/keyOptionData";
-import useOptions from "../../hooks/useOptions";
+import type { Option } from "../../types";
 
-const KeyOptions = () => {
-  const { options: keyOptions, toggleActive } = useOptions(
-    initialKeyOptions,
-    "key"
-  );
+type KeyOptionsProps = {
+  options: Option[];
+  toggleActive: (id: number) => void;
+};
 
+const KeyOptions = ({ options, toggleActive }: KeyOptionsProps) => {
   return (
     <section>
       <div className="grid gap-2 md:gap-4 grid-cols-6 py-4 text-xs md:text-lg">
-        {keyOptions.map((key) => (
+        {options.map((key: Option) => (
           <OptionButton key={key.id} option={key} toggleActive={toggleActive} />
         ))}
       </div>

@@ -3,15 +3,12 @@ import { render, screen, cleanup } from "@testing-library/react";
 import KeyOptions from "./KeyOptions";
 import { initialKeyOptions } from "../../data/keyOptionData";
 
-// Mock the useOptions hook to avoid sessionStorage dependencies
-vi.mock("../../hooks/useOptions", () => ({
-  default: vi.fn(() => ({ options: initialKeyOptions, toggleActive: vi.fn() })),
-}));
-
 describe("KeyOptions", () => {
+  // Mock toggleActive function
+  const mockToggleActive = vi.fn();
+
   beforeEach(() => {
-    // Clear sessionStorage to ensure clean state
-    sessionStorage.clear();
+    mockToggleActive.mockClear();
   });
 
   // Clean up DOM after each test
@@ -20,7 +17,9 @@ describe("KeyOptions", () => {
   });
 
   it("renders all key options from initial data", () => {
-    render(<KeyOptions />);
+    render(
+      <KeyOptions options={initialKeyOptions} toggleActive={mockToggleActive} />
+    );
 
     // Verify that we have the expected number of buttons
     const buttons = screen.getAllByRole("button");
@@ -28,7 +27,9 @@ describe("KeyOptions", () => {
   });
 
   it("renders key labels correctly", () => {
-    render(<KeyOptions />);
+    render(
+      <KeyOptions options={initialKeyOptions} toggleActive={mockToggleActive} />
+    );
 
     // Test a few key labels to ensure data is being passed correctly
     expect(screen.getByText("C")).toBeInTheDocument();

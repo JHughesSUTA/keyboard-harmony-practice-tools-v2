@@ -1,6 +1,11 @@
-import { FaPlay } from "react-icons/fa";
+import { FaPlay, FaStop } from "react-icons/fa";
 
-const Header = () => {
+type HeaderProps = {
+  handlePlayButtonClick: () => void;
+  running: boolean;
+};
+
+const Header = ({ handlePlayButtonClick, running }: HeaderProps) => {
   return (
     <section className="flex justify-between py-4">
       <div>
@@ -16,8 +21,8 @@ const Header = () => {
           step="2"
         />
       </div>
-      <button className="cursor-pointer">
-        <FaPlay size={30} />
+      <button onClick={handlePlayButtonClick} className="cursor-pointer">
+        {running ? <FaStop size={30} /> : <FaPlay size={30} />}
       </button>
     </section>
   );
