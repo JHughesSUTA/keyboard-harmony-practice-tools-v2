@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { render, screen, cleanup } from "@testing-library/react";
 import Controls from "./Controls";
 
 // Mock child components since we're only testing the Controls layout
@@ -12,6 +12,14 @@ vi.mock("../TempoSlider/TempoSlider", () => ({
 }));
 
 describe("Controls", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    cleanup();
+  });
+
   it("should render without crashing", () => {
     expect(() => render(<Controls />)).not.toThrow();
   });
@@ -24,9 +32,9 @@ describe("Controls", () => {
   });
 
   it("should have proper layout structure", () => {
-    render(<Controls />);
+    const { container } = render(<Controls />);
 
-    const section = screen.getByRole("region");
+    const section = container.querySelector("section");
     expect(section).toBeInTheDocument();
     expect(section).toHaveClass("flex", "justify-between", "py-4");
   });

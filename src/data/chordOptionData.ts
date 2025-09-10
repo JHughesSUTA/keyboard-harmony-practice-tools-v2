@@ -3,12 +3,12 @@ import type { Option } from "../types";
 export const initialChordOptions: Option[] = [
   {
     id: 1,
-    label: "M7",
+    label: "7",
     active: true,
   },
   {
     id: 2,
-    label: "7",
+    label: "M7",
     active: true,
   },
   {

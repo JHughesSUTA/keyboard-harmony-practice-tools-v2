@@ -9,7 +9,7 @@ type KeyOptionsProps = {
 const KeyOptions = ({ options, toggleActive }: KeyOptionsProps) => {
   return (
     <section>
-      <div className="grid gap-2 p-2 md:gap-3 grid-cols-6 md:p-3 text-xs md:text-lg border rounded">
+      <div className="grid gap-2 p-2 md:gap-3 grid-cols-6 md:p-3 text-xs md:text-lg">
         {options.map((key: Option) => (
           <OptionButton key={key.id} option={key} toggleActive={toggleActive} />
         ))}

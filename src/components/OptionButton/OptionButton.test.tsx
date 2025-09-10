@@ -65,8 +65,8 @@ describe("OptionButton", () => {
       );
 
       const button = screen.getByText("C Major");
-      expect(button).toHaveClass("bg-blue-500");
-      expect(button).not.toHaveClass("bg-white");
+      expect(button).toHaveClass("bg-cyan-500");
+      expect(button).not.toHaveClass("bg-slate-700");
     });
 
     it("should have white background when option is inactive", () => {
@@ -78,8 +78,8 @@ describe("OptionButton", () => {
       );
 
       const button = screen.getByText("D Minor");
-      expect(button).toHaveClass("bg-white");
-      expect(button).not.toHaveClass("bg-blue-500");
+      expect(button).toHaveClass("bg-slate-700");
+      expect(button).not.toHaveClass("bg-cyan-500");
     });
 
     it("should always have base classes", () => {
@@ -91,7 +91,12 @@ describe("OptionButton", () => {
       );
 
       const button = screen.getByText("C Major");
-      expect(button).toHaveClass("border", "cursor-pointer", "rounded", "py-3");
+      expect(button).toHaveClass(
+        "border-2",
+        "cursor-pointer",
+        "rounded-lg",
+        "py-3"
+      );
     });
   });
 

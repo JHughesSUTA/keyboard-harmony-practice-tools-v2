@@ -10,8 +10,10 @@ const OptionButton = ({ option, toggleActive }: OptionButtonProps) => {
     <button
       key={option.id}
       onClick={() => toggleActive(option.id)}
-      className={`border cursor-pointer rounded py-3 ${
-        option.active ? "bg-blue-500 hover:bg-blue-700" : "bg-white hover:bg-blue-100 transition"
+      className={`border-2 cursor-pointer rounded-lg py-3 font-mono font-semibold transition-all duration-200 ${
+        option.active
+          ? "bg-cyan-500 border-cyan-400 text-black shadow-md shadow-cyan-400/30 hover:bg-cyan-400"
+          : "bg-slate-700 border-slate-500 text-slate-300 hover:bg-slate-600 hover:border-slate-400 hover:text-white"
       }`}
     >
       {option.label}

@@ -1,1 +1,28 @@
 @import "tailwindcss";
+
+/* Custom slider styles for digital appearance */
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #06b6d4;
+  cursor: pointer;
+  border: 2px solid #0891b2;
+  box-shadow: 0 0 4px rgba(6, 182, 212, 0.3);
+}
+
+.slider::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #06b6d4;
+  cursor: pointer;
+  border: 2px solid #0891b2;
+  box-shadow: 0 0 4px rgba(6, 182, 212, 0.3);
+}
+
+body {
+  overflow-x: hidden;
+  overscroll-behavior: none;
+}

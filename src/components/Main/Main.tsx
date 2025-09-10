@@ -20,7 +20,7 @@ const Main = () => {
   } = useOptions(initialChordOptions, "chord");
 
   return (
-    <main className="block w-sm md:w-2xl xl:w-6xl mx-auto bg-gray-300 px-6 py-4 rounded">
+    <main className="block w-sm md:w-2xl xl:w-4xl mx-auto bg-slate-800/50 backdrop-blur-sm border border-slate-600/30 p-4 xl:p-8 rounded-lg shadow-2xl">
       <Controls />
       <KeyOptions options={keyOptions} toggleActive={toggleKeyActive} />
       <Display

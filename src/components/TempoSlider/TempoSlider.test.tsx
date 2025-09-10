@@ -41,7 +41,7 @@ describe("TempoSlider", () => {
       const slider = screen.getByRole("slider");
       expect(slider).toBeInTheDocument();
       expect(slider).toHaveAttribute("min", "20");
-      expect(slider).toHaveAttribute("max", "80");
+      expect(slider).toHaveAttribute("max", "60");
       expect(slider).toHaveAttribute("step", "2");
       expect(slider).toHaveAttribute("type", "range");
       expect(slider).toHaveAttribute("name", "tempo");
@@ -88,10 +88,10 @@ describe("TempoSlider", () => {
 
       // Simulate changing the slider to different values
       fireEvent.change(slider, { target: { value: "30" } });
-      fireEvent.change(slider, { target: { value: "70" } });
+      fireEvent.change(slider, { target: { value: "50" } });
 
       expect(mockSetTempo).toHaveBeenCalledWith(30);
-      expect(mockSetTempo).toHaveBeenCalledWith(70);
+      expect(mockSetTempo).toHaveBeenCalledWith(50);
       expect(mockSetTempo).toHaveBeenCalledTimes(2);
     });
   });
