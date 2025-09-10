@@ -1,22 +1,18 @@
 import useRandomDisplay from "../../hooks/useRandomDisplay";
 import type { Option } from "../../types";
+import { usePlayControls } from "../../context/PlayControlsContext";
 
 type DisplayProps = {
   activeKeyOptions: Option[];
   activeChordOptions: Option[];
-  running: boolean;
 };
 
-const Display = ({
-  activeKeyOptions,
-  activeChordOptions,
-  running,
-}: DisplayProps) => {
+const Display = ({ activeKeyOptions, activeChordOptions }: DisplayProps) => {
+  const { running } = usePlayControls();
   const { displayKey, displayChord } = useRandomDisplay(
     activeKeyOptions,
     activeChordOptions,
-    running,
-    2000
+    running
   );
 
   return (

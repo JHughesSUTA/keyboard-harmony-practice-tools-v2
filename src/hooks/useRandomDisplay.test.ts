@@ -3,6 +3,20 @@ import { renderHook, act } from "@testing-library/react";
 import useRandomDisplay from "./useRandomDisplay";
 import type { Option } from "../types";
 
+// Mock the entire TempoContext module
+vi.mock("../context/TempoContext", () => ({
+  usePlayControls: vi.fn(() => ({
+    tempo: 60, // Default tempo for tests
+    setTempo: vi.fn(),
+    running: true,
+    setRunning: vi.fn(),
+  })),
+}));
+
+// Import the mocked usePlayControls for type safety
+import { usePlayControls } from "../context/PlayControlsContext";
+const mockusePlayControls = vi.mocked(usePlayControls);
+
 describe("useRandomDisplay", () => {
   // Test data
   const mockKeyOptions: Option[] = [
@@ -19,6 +33,13 @@ describe("useRandomDisplay", () => {
 
   beforeEach(() => {
     vi.useFakeTimers();
+    // Reset the mock to default tempo
+    mockusePlayControls.mockReturnValue({
+      tempo: 60,
+      setTempo: vi.fn(),
+      running: true,
+      setRunning: vi.fn(),
+    });
   });
 
   afterEach(() => {
@@ -28,7 +49,7 @@ describe("useRandomDisplay", () => {
   describe("Initialization", () => {
     it("should return default values when not running", () => {
       const { result } = renderHook(() =>
-        useRandomDisplay(mockKeyOptions, mockChordOptions, false, 1000)
+        useRandomDisplay(mockKeyOptions, mockChordOptions, false)
       );
 
       expect(result.current.displayKey).toBe("C");
@@ -37,7 +58,7 @@ describe("useRandomDisplay", () => {
 
     it("should return default values initially even when running", () => {
       const { result } = renderHook(() =>
-        useRandomDisplay(mockKeyOptions, mockChordOptions, true, 1000)
+        useRandomDisplay(mockKeyOptions, mockChordOptions, true)
       );
 
       // Initially should still show defaults
@@ -49,10 +70,10 @@ describe("useRandomDisplay", () => {
   describe("Interval behavior", () => {
     it("should update values after interval when running", () => {
       const { result } = renderHook(() =>
-        useRandomDisplay(mockKeyOptions, mockChordOptions, true, 1000)
+        useRandomDisplay(mockKeyOptions, mockChordOptions, true)
       );
 
-      // Fast-forward time by 1 second
+      // Fast-forward time by 1 second (60000ms / 60 tempo = 1000ms)
       act(() => {
         vi.advanceTimersByTime(1000);
       });
@@ -64,7 +85,7 @@ describe("useRandomDisplay", () => {
 
     it("should not update values when not running", () => {
       const { result } = renderHook(() =>
-        useRandomDisplay(mockKeyOptions, mockChordOptions, false, 1000)
+        useRandomDisplay(mockKeyOptions, mockChordOptions, false)
       );
 
       const initialKey = result.current.displayKey;
@@ -83,7 +104,7 @@ describe("useRandomDisplay", () => {
     it("should stop updating when running changes to false", () => {
       const { result, rerender } = renderHook(
         ({ running }) =>
-          useRandomDisplay(mockKeyOptions, mockChordOptions, running, 1000),
+          useRandomDisplay(mockKeyOptions, mockChordOptions, running),
         { initialProps: { running: true } }
       );
 
@@ -107,12 +128,36 @@ describe("useRandomDisplay", () => {
       expect(result.current.displayKey).toBe(keyAfterFirstUpdate);
       expect(result.current.displayChord).toBe(chordAfterFirstUpdate);
     });
+
+    it("should respond to tempo changes", () => {
+      // Change tempo to 120 (500ms interval)
+      mockusePlayControls.mockReturnValue({
+        tempo: 120,
+        setTempo: vi.fn(),
+        running: true,
+        setRunning: vi.fn(),
+      });
+
+      // Re-render to pick up new tempo
+      const { result } = renderHook(() =>
+        useRandomDisplay(mockKeyOptions, mockChordOptions, true)
+      );
+
+      // Fast-forward by 500ms (new interval: 60000ms / 120 tempo = 500ms)
+      act(() => {
+        vi.advanceTimersByTime(500);
+      });
+
+      // Should have updated with faster tempo
+      expect(["C", "G", "F"]).toContain(result.current.displayKey);
+      expect(["M7", "7", "m7"]).toContain(result.current.displayChord);
+    });
   });
 
   describe("Edge cases", () => {
     it("should handle empty key options array", () => {
       const { result } = renderHook(() =>
-        useRandomDisplay([], mockChordOptions, true, 1000)
+        useRandomDisplay([], mockChordOptions, true)
       );
 
       act(() => {
@@ -127,7 +172,7 @@ describe("useRandomDisplay", () => {
 
     it("should handle empty chord options array", () => {
       const { result } = renderHook(() =>
-        useRandomDisplay(mockKeyOptions, [], true, 1000)
+        useRandomDisplay(mockKeyOptions, [], true)
       );
 
       act(() => {

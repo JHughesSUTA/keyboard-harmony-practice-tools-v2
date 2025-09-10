@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Option } from "../types";
+import { usePlayControls } from "../context/PlayControlsContext";
 
 const getRandomOption = (options: Option[]) => {
   const values = options.map((option) => option.label);
@@ -9,11 +10,11 @@ const getRandomOption = (options: Option[]) => {
 export default function useRandomDisplay(
   activeKeyOptions: Option[],
   activeChordOptions: Option[],
-  running: boolean,
-  interval: number
+  running: boolean
 ) {
   const [displayKey, setDisplayKey] = useState<string>("C");
   const [displayChord, setDisplayChord] = useState<string>("7");
+  const { tempo } = usePlayControls();
 
   useEffect(() => {
     if (!running) return;
@@ -25,10 +26,10 @@ export default function useRandomDisplay(
       if (activeChordOptions.length > 0) {
         setDisplayChord(getRandomOption(activeChordOptions));
       }
-    }, interval);
+    }, 60000 / tempo);
 
     return () => clearInterval(intervalId);
-  }, [running, activeKeyOptions, activeChordOptions, interval]);
+  }, [running, activeKeyOptions, activeChordOptions, tempo]);
 
   return { displayKey, displayChord };
 }

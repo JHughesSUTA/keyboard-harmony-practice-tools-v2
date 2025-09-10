@@ -1,29 +1,11 @@
-import { FaPlay, FaStop } from "react-icons/fa";
+import StartButton from "../StartButton/StartButton";
+import TempoSlider from "../TempoSlider/TempoSlider";
 
-type HeaderProps = {
-  handlePlayButtonClick: () => void;
-  running: boolean;
-};
-
-const Header = ({ handlePlayButtonClick, running }: HeaderProps) => {
+const Header = () => {
   return (
     <section className="flex justify-between py-4">
-      <div>
-        <input
-          name="tempo"
-          className="tempo-container__slider"
-          type="range"
-          autoComplete="off"
-          min="20"
-          max="80"
-          value="30"
-          // onChange={tempoChange}
-          step="2"
-        />
-      </div>
-      <button onClick={handlePlayButtonClick} className="cursor-pointer">
-        {running ? <FaStop size={30} /> : <FaPlay size={30} />}
-      </button>
+      <TempoSlider />
+      <StartButton />
     </section>
   );
 };

@@ -11,6 +11,16 @@ vi.mock("../../hooks/useRandomDisplay", () => ({
   })),
 }));
 
+// Mock the TempoContext
+vi.mock("../../context/TempoContext", () => ({
+  usePlayControls: vi.fn(() => ({
+    running: true,
+    tempo: 60,
+    setTempo: vi.fn(),
+    setRunning: vi.fn(),
+  })),
+}));
+
 describe("Display", () => {
   // Clean up DOM after each test
   afterEach(() => {
@@ -31,7 +41,6 @@ describe("Display", () => {
       <Display
         activeKeyOptions={mockKeyOptions}
         activeChordOptions={mockChordOptions}
-        running={true}
       />
     );
 
@@ -44,7 +53,6 @@ describe("Display", () => {
       <Display
         activeKeyOptions={mockKeyOptions}
         activeChordOptions={mockChordOptions}
-        running={false}
       />
     );
 
@@ -53,9 +61,7 @@ describe("Display", () => {
   });
 
   it("should handle empty options arrays", () => {
-    render(
-      <Display activeKeyOptions={[]} activeChordOptions={[]} running={true} />
-    );
+    render(<Display activeKeyOptions={[]} activeChordOptions={[]} />);
 
     // Should still render (hook handles the empty arrays)
     expect(screen.getByText("CM7")).toBeInTheDocument();
