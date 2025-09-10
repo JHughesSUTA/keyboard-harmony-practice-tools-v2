@@ -97,12 +97,60 @@ describe("TempoSlider", () => {
   });
 
   describe("Accessibility", () => {
-    it("should have proper range input accessibility", () => {
+    it("should have proper ARIA attributes", () => {
       render(<TempoSlider />);
 
       const slider = screen.getByRole("slider");
-      expect(slider).toBeInTheDocument();
+      expect(slider).toHaveAttribute(
+        "aria-label",
+        "Tempo control in beats per minute"
+      );
+      expect(slider).toHaveAttribute("aria-describedby", "tempo-display");
+      expect(slider).toHaveAttribute("aria-valuemin", "20");
+      expect(slider).toHaveAttribute("aria-valuemax", "60");
+      expect(slider).toHaveAttribute("aria-valuenow", "60");
+      expect(slider).toHaveAttribute("aria-valuetext", "60 beats per minute");
+    });
+
+    it("should have proper label association", () => {
+      render(<TempoSlider />);
+
+      const slider = screen.getByRole("slider");
+      const label = screen.getByLabelText("Tempo (beats per minute)");
+
+      expect(label).toBe(slider);
+      expect(slider).toHaveAttribute("id", "tempo-slider");
+    });
+
+    it("should have live region for tempo display", () => {
+      render(<TempoSlider />);
+
+      const display = screen.getByText("60bpm");
+      expect(display).toHaveAttribute("aria-live", "polite");
+      expect(display).toHaveAttribute("id", "tempo-display");
+    });
+
+    it("should update ARIA attributes when tempo changes", () => {
+      mockUsePlayControls.mockReturnValue({
+        tempo: 40,
+        setTempo: mockSetTempo,
+        running: false,
+        setRunning: vi.fn(),
+      });
+
+      render(<TempoSlider />);
+
+      const slider = screen.getByRole("slider");
+      expect(slider).toHaveAttribute("aria-valuenow", "40");
+      expect(slider).toHaveAttribute("aria-valuetext", "40 beats per minute");
+    });
+
+    it("should have keyboard navigation support", () => {
+      render(<TempoSlider />);
+
+      const slider = screen.getByRole("slider");
       expect(slider).toHaveAttribute("autoComplete", "off");
+      expect(slider).toHaveAttribute("step", "2");
     });
   });
 });

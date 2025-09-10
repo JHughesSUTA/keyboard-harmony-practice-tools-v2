@@ -138,19 +138,58 @@ describe("StartButton", () => {
   });
 
   describe("Accessibility", () => {
-    it("should have cursor-pointer class for better UX", () => {
+    it("should have proper ARIA attributes when not running", () => {
       render(<StartButton />);
 
       const button = screen.getByRole("button");
-      expect(button).toHaveClass("cursor-pointer");
+      expect(button).toHaveAttribute("aria-label", "Start randomizer");
+      expect(button).toHaveAttribute("aria-pressed", "false");
+      expect(button).toHaveAttribute("type", "button");
     });
 
-    it("should be focusable", () => {
+    it("should have proper ARIA attributes when running", () => {
+      mockUsePlayControls.mockReturnValue({
+        tempo: 60,
+        setTempo: vi.fn(),
+        running: true,
+        setRunning: mockSetRunning,
+      });
+
+      render(<StartButton />);
+
+      const button = screen.getByRole("button");
+      expect(button).toHaveAttribute("aria-label", "Stop randomizer");
+      expect(button).toHaveAttribute("aria-pressed", "true");
+    });
+
+    it("should have screen reader text that matches button state", () => {
+      render(<StartButton />);
+
+      expect(screen.getByText("Start randomizer")).toBeInTheDocument();
+      expect(screen.getByText("Start randomizer")).toHaveClass("sr-only");
+    });
+
+    it("should update screen reader text when running state changes", () => {
+      mockUsePlayControls.mockReturnValue({
+        tempo: 60,
+        setTempo: vi.fn(),
+        running: true,
+        setRunning: mockSetRunning,
+      });
+
+      render(<StartButton />);
+
+      expect(screen.getByText("Stop randomizer")).toBeInTheDocument();
+      expect(screen.getByText("Stop randomizer")).toHaveClass("sr-only");
+    });
+
+    it("should be focusable with keyboard navigation", () => {
       render(<StartButton />);
 
       const button = screen.getByRole("button");
       button.focus();
       expect(button).toHaveFocus();
+      expect(button).toHaveClass("cursor-pointer");
     });
   });
 });
