@@ -3,8 +3,8 @@ import { renderHook, act } from "@testing-library/react";
 import useRandomDisplay from "./useRandomDisplay";
 import type { Option } from "../types";
 
-// Mock the entire TempoContext module
-vi.mock("../context/TempoContext", () => ({
+// Mock the entire PlayControlsContext module
+vi.mock("../context/PlayControlsContext", () => ({
   usePlayControls: vi.fn(() => ({
     tempo: 60, // Default tempo for tests
     setTempo: vi.fn(),

@@ -11,8 +11,8 @@ vi.mock("../../hooks/useRandomDisplay", () => ({
   })),
 }));
 
-// Mock the TempoContext
-vi.mock("../../context/TempoContext", () => ({
+// Mock the PlayControlsContext
+vi.mock("../../context/PlayControlsContext", () => ({
   usePlayControls: vi.fn(() => ({
     running: true,
     tempo: 60,

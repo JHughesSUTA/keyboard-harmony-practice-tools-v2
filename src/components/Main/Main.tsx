@@ -1,7 +1,7 @@
 import KeyOptions from "../KeyOptions/KeyOptions";
 import ChordOptions from "../ChordOptions/ChordOptions";
 import Display from "../Display/Display";
-import Header from "../Header/Header";
+import Controls from "../Controls/Controls";
 import useOptions from "../../hooks/useOptions";
 import { initialChordOptions } from "../../data/chordOptionData";
 import { initialKeyOptions } from "../../data/keyOptionData";
@@ -21,7 +21,7 @@ const Main = () => {
 
   return (
     <main className="max-w-sm md:max-w-2xl xl:max-w-6xl mx-auto bg-gray-300 px-6">
-      <Header />
+      <Controls />
       <KeyOptions options={keyOptions} toggleActive={toggleKeyActive} />
       <Display
         activeKeyOptions={activeKeyOptions}
