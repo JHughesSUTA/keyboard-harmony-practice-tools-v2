@@ -16,8 +16,8 @@ const Display = ({ activeKeyOptions, activeChordOptions }: DisplayProps) => {
   );
 
   return (
-    <section>
-      <div className="flex border justify-center py-4">
+    <section className="my-4">
+      <div className="flex border justify-center py-4 rounded-full items-center mx-auto h-[300px] w-[300px]">
         <span className="text-6xl md:text-8xl">
           {`${displayKey}${displayChord}`}
         </span>
