@@ -1,19 +1,22 @@
 import OptionButton from "../OptionButton/OptionButton";
 import type { Option } from "../../types";
 
-type ChordOptionsProps = {
+type OptionsButtonGridProps = {
   options: Option[];
   toggleActive: (id: number) => void;
 };
 
-const ChordOptions = ({ options, toggleActive }: ChordOptionsProps) => {
+const OptionsButtonGrid = ({
+  options,
+  toggleActive,
+}: OptionsButtonGridProps) => {
   return (
     <section>
       <div className="grid gap-2 p-2 md:gap-3 grid-cols-6 md:p-3 text-xs md:text-lg">
-        {options.map((chord: Option) => (
+        {options.map((option: Option) => (
           <OptionButton
-            key={chord.id}
-            option={chord}
+            key={option.id}
+            option={option}
             toggleActive={toggleActive}
           />
         ))}
@@ -22,4 +25,4 @@ const ChordOptions = ({ options, toggleActive }: ChordOptionsProps) => {
   );
 };
 
-export default ChordOptions;
+export default OptionsButtonGrid;

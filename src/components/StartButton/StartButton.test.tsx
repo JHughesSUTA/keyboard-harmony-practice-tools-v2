@@ -158,7 +158,7 @@ describe("StartButton", () => {
       render(<StartButton />);
 
       const button = screen.getByRole("button");
-      expect(button).toHaveAttribute("aria-label", "Stop randomizer");
+      expect(button).toHaveAttribute("aria-label", "Pause randomizer");
       expect(button).toHaveAttribute("aria-pressed", "true");
     });
 
@@ -179,8 +179,8 @@ describe("StartButton", () => {
 
       render(<StartButton />);
 
-      expect(screen.getByText("Stop randomizer")).toBeInTheDocument();
-      expect(screen.getByText("Stop randomizer")).toHaveClass("sr-only");
+      expect(screen.getByText("Pause randomizer")).toBeInTheDocument();
+      expect(screen.getByText("Pause randomizer")).toHaveClass("sr-only");
     });
 
     it("should be focusable with keyboard navigation", () => {
