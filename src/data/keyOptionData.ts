@@ -17,7 +17,7 @@ export const initialKeyOptions: Option[] = [
     id: 3,
     label: "D",
     pronunciation: "D",
-    active: false,
+    active: true,
   },
   {
     id: 4,

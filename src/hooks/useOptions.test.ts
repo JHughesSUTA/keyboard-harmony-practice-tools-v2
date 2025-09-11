@@ -98,6 +98,63 @@ describe("useOptions", () => {
         active: true,
       }); // Unchanged
     });
+
+    it("should prevent deactivating the last active option", () => {
+      // Create test data with only one active option
+      const singleActiveOptions: Option[] = [
+        { id: 1, label: "Option 1", pronunciation: "Option 1", active: true },
+        { id: 2, label: "Option 2", pronunciation: "Option 2", active: false },
+        { id: 3, label: "Option 3", pronunciation: "Option 3", active: false },
+      ];
+
+      const { result } = renderHook(() =>
+        useOptions(singleActiveOptions, mockOptionType)
+      );
+
+      // Try to deactivate the only active option
+      act(() => {
+        result.current.toggleActive(1);
+      });
+
+      // Should remain unchanged - still active
+      expect(result.current.options[0].active).toBe(true);
+      expect(result.current.activeOptions).toHaveLength(1);
+    });
+
+    it("should allow activating additional options when only one is active", () => {
+      // Create test data with only one active option
+      const singleActiveOptions: Option[] = [
+        { id: 1, label: "Option 1", pronunciation: "Option 1", active: true },
+        { id: 2, label: "Option 2", pronunciation: "Option 2", active: false },
+        { id: 3, label: "Option 3", pronunciation: "Option 3", active: false },
+      ];
+
+      const { result } = renderHook(() =>
+        useOptions(singleActiveOptions, mockOptionType)
+      );
+
+      // Should be able to activate another option
+      act(() => {
+        result.current.toggleActive(2);
+      });
+
+      expect(result.current.options[1].active).toBe(true);
+      expect(result.current.activeOptions).toHaveLength(2);
+    });
+
+    it("should allow deactivating options when multiple are active", () => {
+      const { result } = renderHook(
+        () => useOptions(mockInitialOptions, mockOptionType) // Has 2 active options
+      );
+
+      // Should be able to deactivate one when multiple are active
+      act(() => {
+        result.current.toggleActive(1);
+      });
+
+      expect(result.current.options[0].active).toBe(false);
+      expect(result.current.activeOptions).toHaveLength(1);
+    });
   });
 
   describe("sessionStorage integration", () => {

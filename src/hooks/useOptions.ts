@@ -15,13 +15,17 @@ export default function useOptions(
     }
   });
 
-  const activeOptions = options.filter((option) => option.active);
+  const activeOptions = options.filter((option) => option.active === true);
 
   useEffect(() => {
     sessionStorage.setItem(`${optionType}-options`, JSON.stringify(options));
   }, [options]);
 
   const toggleActive = (id: number) => {
+    const targetOption = options.find((option) => option.id === id);
+
+    if (activeOptions.length === 1 && targetOption?.active === true) return;
+
     setOptions((prev) =>
       prev.map((option) =>
         option.id === id ? { ...option, active: !option.active } : option
