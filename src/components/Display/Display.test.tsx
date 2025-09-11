@@ -10,6 +10,7 @@ vi.mock("../../hooks/useRandomDisplay", () => ({
     displayKeyPronunciation: "C",
     displayChord: "M7",
     displayChordPronunciation: "Major 7",
+    isLongName: false,
   })),
 }));
 
@@ -26,6 +27,10 @@ vi.mock("../../context/PlayControlsContext", () => ({
 // Import the mocked function for type safety
 import { usePlayControls } from "../../context/PlayControlsContext";
 const mockUsePlayControls = vi.mocked(usePlayControls);
+
+// Import the mocked useRandomDisplay for manipulation
+import useRandomDisplay from "../../hooks/useRandomDisplay";
+const mockUseRandomDisplay = vi.mocked(useRandomDisplay);
 
 describe("Display", () => {
   // Clean up DOM after each test
@@ -134,5 +139,47 @@ describe("Display", () => {
       setTempo: vi.fn(),
       setRunning: vi.fn(),
     });
+  });
+
+  it("should apply larger font size for short combinations", () => {
+    mockUseRandomDisplay.mockReturnValue({
+      displayKey: "C",
+      displayKeyPronunciation: "C",
+      displayChord: "7",
+      displayChordPronunciation: "Seventh",
+      isLongName: false,
+    });
+
+    render(
+      <Display
+        activeKeyOptions={mockKeyOptions}
+        activeChordOptions={mockChordOptions}
+      />
+    );
+
+    const displaySpan = screen.getByText("C7");
+    expect(displaySpan).toHaveClass("text-6xl");
+    expect(displaySpan).not.toHaveClass("text-5xl");
+  });
+
+  it("should apply smaller font size for long combinations", () => {
+    mockUseRandomDisplay.mockReturnValue({
+      displayKey: "F#",
+      displayKeyPronunciation: "F Sharp",
+      displayChord: "maj13",
+      displayChordPronunciation: "Major Thirteenth",
+      isLongName: true,
+    });
+
+    render(
+      <Display
+        activeKeyOptions={mockKeyOptions}
+        activeChordOptions={mockChordOptions}
+      />
+    );
+
+    const displaySpan = screen.getByText("F#maj13");
+    expect(displaySpan).toHaveClass("text-5xl");
+    expect(displaySpan).not.toHaveClass("text-6xl");
   });
 });

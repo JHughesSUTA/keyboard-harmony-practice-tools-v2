@@ -56,6 +56,7 @@ describe("useRandomDisplay", () => {
       expect(result.current.displayKeyPronunciation).toBe("C");
       expect(result.current.displayChord).toBe("7");
       expect(result.current.displayChordPronunciation).toBe("Seventh");
+      expect(result.current.isLongName).toBe(false); // "C" + "7" = 2 chars < 6
     });
 
     it("should return default values initially even when running", () => {
@@ -68,6 +69,7 @@ describe("useRandomDisplay", () => {
       expect(result.current.displayKeyPronunciation).toBe("C");
       expect(result.current.displayChord).toBe("7");
       expect(result.current.displayChordPronunciation).toBe("Seventh");
+      expect(result.current.isLongName).toBe(false); // "C" + "7" = 2 chars < 6
     });
   });
 
@@ -182,6 +184,61 @@ describe("useRandomDisplay", () => {
       expect(["Seventh", "Major 7", "Minor 7"]).toContain(
         result.current.displayChordPronunciation
       );
+    });
+  });
+
+  describe("isLongName calculation", () => {
+    it("should return false for short combinations", () => {
+      const shortKeyOptions: Option[] = [
+        { id: 1, label: "C", pronunciation: "C", active: true },
+      ];
+      const shortChordOptions: Option[] = [
+        { id: 1, label: "7", pronunciation: "Seventh", active: true },
+      ];
+
+      const { result } = renderHook(() =>
+        useRandomDisplay(shortKeyOptions, shortChordOptions, false)
+      );
+
+      // "C" + "7" = 2 characters <= 6
+      expect(result.current.isLongName).toBe(false);
+    });
+
+    it("should return true for long combinations", () => {
+      const longKeyOptions: Option[] = [
+        { id: 1, label: "F#", pronunciation: "F Sharp", active: true },
+      ];
+      const longChordOptions: Option[] = [
+        {
+          id: 1,
+          label: "maj13",
+          pronunciation: "Major Thirteenth",
+          active: true,
+        },
+      ];
+
+      const { result } = renderHook(() =>
+        useRandomDisplay(longKeyOptions, longChordOptions, false)
+      );
+
+      // "F#" + "maj13" = 2 + 5 = 7 characters > 6
+      expect(result.current.isLongName).toBe(true);
+    });
+
+    it("should return false for exactly 6 character combinations", () => {
+      const boundaryKeyOptions: Option[] = [
+        { id: 1, label: "Bb", pronunciation: "B Flat", active: true },
+      ];
+      const boundaryChordOptions: Option[] = [
+        { id: 1, label: "maj7", pronunciation: "Major Seven", active: true },
+      ];
+
+      const { result } = renderHook(() =>
+        useRandomDisplay(boundaryKeyOptions, boundaryChordOptions, false)
+      );
+
+      // "Bb" + "maj7" = 6 characters = 6 (boundary case, should be false)
+      expect(result.current.isLongName).toBe(false);
     });
   });
 

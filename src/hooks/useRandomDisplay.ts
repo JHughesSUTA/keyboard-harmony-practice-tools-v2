@@ -37,6 +37,8 @@ export default function useRandomDisplay(
   const { label: displayChord, pronunciation: displayChordPronunciation } =
     randomizedChord;
 
+  const isLongName = displayKey.length + displayChord.length > 6;
+
   const { tempo } = usePlayControls();
 
   useEffect(() => {
@@ -59,5 +61,6 @@ export default function useRandomDisplay(
     displayKeyPronunciation,
     displayChord,
     displayChordPronunciation,
+    isLongName,
   };
 }
