@@ -3,8 +3,7 @@ import type { Option } from "../types";
 import { usePlayControls } from "../context/PlayControlsContext";
 
 const getRandomOption = (options: Option[]) => {
-  const values = options.map((option) => option.label);
-  return values[Math.floor(Math.random() * values.length)];
+  return options[Math.floor(Math.random() * options.length)];
 };
 
 export default function useRandomDisplay(
@@ -12,8 +11,32 @@ export default function useRandomDisplay(
   activeChordOptions: Option[],
   running: boolean
 ) {
-  const [displayKey, setDisplayKey] = useState<string>("C");
-  const [displayChord, setDisplayChord] = useState<string>("7");
+  // Fallback options for edge cases (though you mentioned arrays will always have options)
+  const defaultKeyOption: Option = {
+    id: 0,
+    label: "C",
+    pronunciation: "C",
+    active: true,
+  };
+  const defaultChordOption: Option = {
+    id: 0,
+    label: "7",
+    pronunciation: "Seventh",
+    active: true,
+  };
+
+  const [randomizedKey, setRandomizedKey] = useState<Option>(
+    activeKeyOptions[0] || defaultKeyOption
+  );
+  const [randomizedChord, setRandomizedChord] = useState<Option>(
+    activeChordOptions[0] || defaultChordOption
+  );
+
+  const { label: displayKey, pronunciation: displayKeyPronunciation } =
+    randomizedKey;
+  const { label: displayChord, pronunciation: displayChordPronunciation } =
+    randomizedChord;
+
   const { tempo } = usePlayControls();
 
   useEffect(() => {
@@ -21,15 +44,20 @@ export default function useRandomDisplay(
 
     const intervalId = setInterval(() => {
       if (activeKeyOptions.length > 0) {
-        setDisplayKey(getRandomOption(activeKeyOptions));
+        setRandomizedKey(getRandomOption(activeKeyOptions));
       }
       if (activeChordOptions.length > 0) {
-        setDisplayChord(getRandomOption(activeChordOptions));
+        setRandomizedChord(getRandomOption(activeChordOptions));
       }
     }, 60000 / tempo);
 
     return () => clearInterval(intervalId);
   }, [running, activeKeyOptions, activeChordOptions, tempo]);
 
-  return { displayKey, displayChord };
+  return {
+    displayKey,
+    displayKeyPronunciation,
+    displayChord,
+    displayChordPronunciation,
+  };
 }

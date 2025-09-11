@@ -20,15 +20,15 @@ const mockusePlayControls = vi.mocked(usePlayControls);
 describe("useRandomDisplay", () => {
   // Test data
   const mockKeyOptions: Option[] = [
-    { id: 1, label: "C", active: true },
-    { id: 2, label: "G", active: true },
-    { id: 3, label: "F", active: true },
+    { id: 1, label: "C", pronunciation: "C", active: true },
+    { id: 2, label: "G", pronunciation: "G", active: true },
+    { id: 3, label: "F", pronunciation: "F", active: true },
   ];
 
   const mockChordOptions: Option[] = [
-    { id: 1, label: "M7", active: true },
-    { id: 2, label: "7", active: true },
-    { id: 3, label: "m7", active: true },
+    { id: 2, label: "7", pronunciation: "Seventh", active: true },
+    { id: 1, label: "M7", pronunciation: "Major 7", active: true },
+    { id: 3, label: "m7", pronunciation: "Minor 7", active: true },
   ];
 
   beforeEach(() => {
@@ -53,7 +53,9 @@ describe("useRandomDisplay", () => {
       );
 
       expect(result.current.displayKey).toBe("C");
+      expect(result.current.displayKeyPronunciation).toBe("C");
       expect(result.current.displayChord).toBe("7");
+      expect(result.current.displayChordPronunciation).toBe("Seventh");
     });
 
     it("should return default values initially even when running", () => {
@@ -63,7 +65,9 @@ describe("useRandomDisplay", () => {
 
       // Initially should still show defaults
       expect(result.current.displayKey).toBe("C");
+      expect(result.current.displayKeyPronunciation).toBe("C");
       expect(result.current.displayChord).toBe("7");
+      expect(result.current.displayChordPronunciation).toBe("Seventh");
     });
   });
 
@@ -80,7 +84,11 @@ describe("useRandomDisplay", () => {
 
       // Should have updated to one of the available options
       expect(["C", "G", "F"]).toContain(result.current.displayKey);
-      expect(["M7", "7", "m7"]).toContain(result.current.displayChord);
+      expect(["C", "G", "F"]).toContain(result.current.displayKeyPronunciation);
+      expect(["7", "M7", "m7"]).toContain(result.current.displayChord);
+      expect(["Seventh", "Major 7", "Minor 7"]).toContain(
+        result.current.displayChordPronunciation
+      );
     });
 
     it("should not update values when not running", () => {
@@ -89,7 +97,10 @@ describe("useRandomDisplay", () => {
       );
 
       const initialKey = result.current.displayKey;
+      const initialKeyPronunciation = result.current.displayKeyPronunciation;
       const initialChord = result.current.displayChord;
+      const initialChordPronunciation =
+        result.current.displayChordPronunciation;
 
       // Fast-forward time
       act(() => {
@@ -98,7 +109,13 @@ describe("useRandomDisplay", () => {
 
       // Values should remain the same
       expect(result.current.displayKey).toBe(initialKey);
+      expect(result.current.displayKeyPronunciation).toBe(
+        initialKeyPronunciation
+      );
       expect(result.current.displayChord).toBe(initialChord);
+      expect(result.current.displayChordPronunciation).toBe(
+        initialChordPronunciation
+      );
     });
 
     it("should stop updating when running changes to false", () => {
@@ -114,7 +131,11 @@ describe("useRandomDisplay", () => {
       });
 
       const keyAfterFirstUpdate = result.current.displayKey;
+      const keyPronunciationAfterFirstUpdate =
+        result.current.displayKeyPronunciation;
       const chordAfterFirstUpdate = result.current.displayChord;
+      const chordPronunciationAfterFirstUpdate =
+        result.current.displayChordPronunciation;
 
       // Stop running
       rerender({ running: false });
@@ -126,7 +147,13 @@ describe("useRandomDisplay", () => {
 
       // Values should not have changed after stopping
       expect(result.current.displayKey).toBe(keyAfterFirstUpdate);
+      expect(result.current.displayKeyPronunciation).toBe(
+        keyPronunciationAfterFirstUpdate
+      );
       expect(result.current.displayChord).toBe(chordAfterFirstUpdate);
+      expect(result.current.displayChordPronunciation).toBe(
+        chordPronunciationAfterFirstUpdate
+      );
     });
 
     it("should respond to tempo changes", () => {
@@ -150,7 +177,11 @@ describe("useRandomDisplay", () => {
 
       // Should have updated with faster tempo
       expect(["C", "G", "F"]).toContain(result.current.displayKey);
-      expect(["M7", "7", "m7"]).toContain(result.current.displayChord);
+      expect(["C", "G", "F"]).toContain(result.current.displayKeyPronunciation);
+      expect(["7", "M7", "m7"]).toContain(result.current.displayChord);
+      expect(["Seventh", "Major 7", "Minor 7"]).toContain(
+        result.current.displayChordPronunciation
+      );
     });
   });
 
@@ -166,8 +197,12 @@ describe("useRandomDisplay", () => {
 
       // Key should remain default when no options available
       expect(result.current.displayKey).toBe("C");
+      expect(result.current.displayKeyPronunciation).toBe("C");
       // Chord should still update
-      expect(["M7", "7", "m7"]).toContain(result.current.displayChord);
+      expect(["7", "M7", "m7"]).toContain(result.current.displayChord);
+      expect(["Seventh", "Major 7", "Minor 7"]).toContain(
+        result.current.displayChordPronunciation
+      );
     });
 
     it("should handle empty chord options array", () => {
@@ -181,8 +216,10 @@ describe("useRandomDisplay", () => {
 
       // Key should update
       expect(["C", "G", "F"]).toContain(result.current.displayKey);
+      expect(["C", "G", "F"]).toContain(result.current.displayKeyPronunciation);
       // Chord should remain default when no options available
       expect(result.current.displayChord).toBe("7");
+      expect(result.current.displayChordPronunciation).toBe("Seventh");
     });
   });
 });

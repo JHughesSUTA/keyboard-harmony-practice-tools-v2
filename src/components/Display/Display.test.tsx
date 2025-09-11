@@ -7,7 +7,9 @@ import type { Option } from "../../types";
 vi.mock("../../hooks/useRandomDisplay", () => ({
   default: vi.fn(() => ({
     displayKey: "C",
+    displayKeyPronunciation: "C",
     displayChord: "M7",
+    displayChordPronunciation: "Major 7",
   })),
 }));
 
@@ -20,6 +22,10 @@ vi.mock("../../context/PlayControlsContext", () => ({
     setRunning: vi.fn(),
   })),
 }));
+
+// Import the mocked function for type safety
+import { usePlayControls } from "../../context/PlayControlsContext";
+const mockUsePlayControls = vi.mocked(usePlayControls);
 
 describe("Display", () => {
   // Clean up DOM after each test
@@ -65,5 +71,68 @@ describe("Display", () => {
 
     // Should still render (hook handles the empty arrays)
     expect(screen.getByText("CM7")).toBeInTheDocument();
+  });
+
+  it("should have proper accessibility structure", () => {
+    render(
+      <Display
+        activeKeyOptions={mockKeyOptions}
+        activeChordOptions={mockChordOptions}
+      />
+    );
+
+    // Should have proper section with aria-label
+    expect(
+      screen.getByRole("region", { name: "Chord display" })
+    ).toBeInTheDocument();
+
+    // Visual display should be hidden from screen readers
+    const visualDisplay = screen.getByText("CM7");
+    expect(visualDisplay).toHaveAttribute("aria-hidden", "true");
+  });
+
+  it("should announce chord changes for screen readers when running", () => {
+    render(
+      <Display
+        activeKeyOptions={mockKeyOptions}
+        activeChordOptions={mockChordOptions}
+      />
+    );
+
+    // Should have live region with pronunciation for screen readers
+    const liveRegion = document.querySelector('[aria-live="polite"]');
+    expect(liveRegion).toBeInTheDocument();
+    expect(liveRegion).toHaveTextContent("C Major 7");
+    expect(liveRegion).toHaveClass("sr-only");
+  });
+
+  it("should not announce when not running", () => {
+    // Mock running as false
+    mockUsePlayControls.mockReturnValue({
+      running: false,
+      tempo: 60,
+      setTempo: vi.fn(),
+      setRunning: vi.fn(),
+    });
+
+    render(
+      <Display
+        activeKeyOptions={mockKeyOptions}
+        activeChordOptions={mockChordOptions}
+      />
+    );
+
+    // Live region should be empty when not running
+    const liveRegion = document.querySelector('[aria-live="polite"]');
+    expect(liveRegion).toBeInTheDocument();
+    expect(liveRegion).toHaveTextContent("");
+
+    // Reset mock for other tests
+    mockUsePlayControls.mockReturnValue({
+      running: true,
+      tempo: 60,
+      setTempo: vi.fn(),
+      setRunning: vi.fn(),
+    });
   });
 });
