@@ -9,12 +9,14 @@ describe("OptionButton", () => {
   const mockActiveOption: Option = {
     id: 1,
     label: "C Major",
+    pronunciation: "C Major",
     active: true,
   };
 
   const mockInactiveOption: Option = {
     id: 2,
     label: "D Minor",
+    pronunciation: "D Minor",
     active: false,
   };
 
@@ -56,7 +58,7 @@ describe("OptionButton", () => {
   });
 
   describe("Styling based on active state", () => {
-    it("should have blue background when option is active", () => {
+    it("should have cyan background when option is active", () => {
       render(
         <OptionButton
           option={mockActiveOption}
@@ -69,7 +71,7 @@ describe("OptionButton", () => {
       expect(button).not.toHaveClass("bg-slate-700");
     });
 
-    it("should have white background when option is inactive", () => {
+    it("should have slate background when option is inactive", () => {
       render(
         <OptionButton
           option={mockInactiveOption}

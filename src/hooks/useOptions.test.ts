@@ -19,9 +19,9 @@ Object.defineProperty(window, "sessionStorage", {
 describe("useOptions", () => {
   // Test data
   const mockInitialOptions: Option[] = [
-    { id: 1, label: "Option 1", active: true },
-    { id: 2, label: "Option 2", active: false },
-    { id: 3, label: "Option 3", active: true },
+    { id: 1, label: "Option 1", pronunciation: "Option 1", active: true },
+    { id: 2, label: "Option 2", pronunciation: "Option 2", active: false },
+    { id: 3, label: "Option 3", pronunciation: "Option 3", active: true },
   ];
 
   const mockOptionType = "test";
@@ -44,9 +44,9 @@ describe("useOptions", () => {
 
     it("should load stored options from sessionStorage when available", () => {
       const storedOptions: Option[] = [
-        { id: 1, label: "Option 1", active: false }, // Different from initial
-        { id: 2, label: "Option 2", active: true }, // Different from initial
-        { id: 3, label: "Option 3", active: false }, // Different from initial
+        { id: 1, label: "Option 1", pronunciation: "Option 1", active: false }, // Different from initial
+        { id: 2, label: "Option 2", pronunciation: "Option 2", active: true }, // Different from initial
+        { id: 3, label: "Option 3", pronunciation: "Option 3", active: false }, // Different from initial
       ];
 
       sessionStorageMock.getItem.mockReturnValue(JSON.stringify(storedOptions));
@@ -82,16 +82,19 @@ describe("useOptions", () => {
       expect(updatedOptions[0]).toEqual({
         id: 1,
         label: "Option 1",
+        pronunciation: "Option 1",
         active: true,
       }); // Unchanged
       expect(updatedOptions[1]).toEqual({
         id: 2,
         label: "Option 2",
+        pronunciation: "Option 2",
         active: true,
       }); // Changed from false to true
       expect(updatedOptions[2]).toEqual({
         id: 3,
         label: "Option 3",
+        pronunciation: "Option 3",
         active: true,
       }); // Unchanged
     });

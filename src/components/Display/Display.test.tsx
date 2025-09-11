@@ -27,13 +27,13 @@ describe("Display", () => {
     cleanup();
   });
   const mockKeyOptions: Option[] = [
-    { id: 1, label: "C", active: true },
-    { id: 2, label: "G", active: true },
+    { id: 1, label: "C", pronunciation: "C", active: true },
+    { id: 2, label: "G", pronunciation: "G", active: true },
   ];
 
   const mockChordOptions: Option[] = [
-    { id: 1, label: "M7", active: true },
-    { id: 2, label: "7", active: true },
+    { id: 1, label: "M7", pronunciation: "Major 7", active: true },
+    { id: 2, label: "7", pronunciation: "7", active: true },
   ];
 
   it("should render the combined key and chord display", () => {

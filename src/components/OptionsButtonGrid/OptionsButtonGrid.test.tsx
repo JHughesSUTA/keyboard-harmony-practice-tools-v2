@@ -19,9 +19,9 @@ describe("OptionsButtonGrid", () => {
   describe("Rendering", () => {
     it("should render all provided options as buttons", () => {
       const testOptions = [
-        { id: 1, label: "Test 1", active: true },
-        { id: 2, label: "Test 2", active: false },
-        { id: 3, label: "Test 3", active: true },
+        { id: 1, label: "Test 1", pronunciation: "Test 1", active: true },
+        { id: 2, label: "Test 2", pronunciation: "Test 2", active: false },
+        { id: 3, label: "Test 3", pronunciation: "Test 3", active: true },
       ];
 
       render(
@@ -48,7 +48,9 @@ describe("OptionsButtonGrid", () => {
     });
 
     it("should have proper grid layout structure", () => {
-      const testOptions = [{ id: 1, label: "Test", active: true }];
+      const testOptions = [
+        { id: 1, label: "Test", pronunciation: "Test", active: true },
+      ];
 
       const { container } = render(
         <OptionsButtonGrid
@@ -124,7 +126,14 @@ describe("OptionsButtonGrid", () => {
   describe("Interaction", () => {
     it("should pass toggleActive function to child buttons", async () => {
       const user = userEvent.setup();
-      const testOptions = [{ id: 1, label: "Test Button", active: false }];
+      const testOptions = [
+        {
+          id: 1,
+          label: "Test Button",
+          pronunciation: "Test Button",
+          active: false,
+        },
+      ];
 
       render(
         <OptionsButtonGrid
@@ -143,8 +152,8 @@ describe("OptionsButtonGrid", () => {
     it("should handle multiple button interactions", async () => {
       const user = userEvent.setup();
       const testOptions = [
-        { id: 1, label: "Button 1", active: false },
-        { id: 2, label: "Button 2", active: true },
+        { id: 1, label: "Button 1", pronunciation: "Button 1", active: false },
+        { id: 2, label: "Button 2", pronunciation: "Button 2", active: true },
       ];
 
       render(
@@ -165,7 +174,9 @@ describe("OptionsButtonGrid", () => {
 
   describe("Accessibility", () => {
     it("should have proper semantic structure", () => {
-      const testOptions = [{ id: 1, label: "Test", active: true }];
+      const testOptions = [
+        { id: 1, label: "Test", pronunciation: "Test", active: true },
+      ];
 
       const { container } = render(
         <OptionsButtonGrid
@@ -180,8 +191,18 @@ describe("OptionsButtonGrid", () => {
 
     it("should maintain button accessibility through OptionButton component", () => {
       const testOptions = [
-        { id: 1, label: "Active Option", active: true },
-        { id: 2, label: "Inactive Option", active: false },
+        {
+          id: 1,
+          label: "Active Option",
+          pronunciation: "Active Option",
+          active: true,
+        },
+        {
+          id: 2,
+          label: "Inactive Option",
+          pronunciation: "Inactive Option",
+          active: false,
+        },
       ];
 
       render(
